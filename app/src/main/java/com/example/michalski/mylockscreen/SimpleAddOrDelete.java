@@ -14,14 +14,18 @@ class SimpleAddOrDelete implements PossibleQuestions{
     MyOperation operation;
     public void Init(AppCompatActivity activity) {
         activity.setContentView(R.layout.activity_main);
-        Random r = new Random();
-        first = r.nextInt(5) + 1;
+    }
+
+    // Uses bottom 6 bits from random number.
+    public void Execute(AppCompatActivity activity, int randomNumber, final PossibleAnswers answers) {
+        first = randomNumber % 8;
+
         String operationChar;
         //if (r.nextInt(2) == 0) {
-            operation = MyOperation.ADD;
-            second = r.nextInt(5) + 1;
-            result = first + second;
-            operationChar = "+";
+        operation = MyOperation.ADD;
+        second = (randomNumber >> 3) % 8;
+        result = first + second;
+        operationChar = "+";
         /*} else {
             operation = MyOperation.SUBTRACT;
             second = r.nextInt(first + 1);
@@ -31,9 +35,7 @@ class SimpleAddOrDelete implements PossibleQuestions{
         ((TextView)activity.findViewById(R.id.firstPart)).setText(Integer.toString(first));
         ((TextView)activity.findViewById(R.id.secondPart)).setText(Integer.toString(second));
         ((TextView)activity.findViewById(R.id.operationPart)).setText(operationChar);
-    }
 
-    public void Execute(AppCompatActivity activity, final PossibleAnswers answers) {
         final EditText resultText = (EditText)activity.findViewById(R.id.resultText);
         assert resultText != null;
         resultText.addTextChangedListener(new TextWatcher() {

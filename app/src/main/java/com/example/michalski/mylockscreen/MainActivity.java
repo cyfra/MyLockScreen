@@ -18,6 +18,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -32,6 +33,7 @@ import java.util.Random;
 
 
 public class MainActivity extends AppCompatActivity {
+    private final static String TAG = "MainActivity";
 
     private ComponentName mComponentName;
     private static final int ADMIN_INTENT = 15;
@@ -48,8 +50,8 @@ public class MainActivity extends AppCompatActivity {
         possibleQuestions.Init(this);
 
         makeFullScreen();
-        startService(new Intent(this,LockScreenService.class));
-        mDevicePolicyManager = (DevicePolicyManager)getSystemService(
+        startService(new Intent(this, LockScreenService.class));
+        mDevicePolicyManager = (DevicePolicyManager) getSystemService(
                 Context.DEVICE_POLICY_SERVICE);
         mComponentName = new ComponentName(this, MyAdminReceiver.class);
         if (!mDevicePolicyManager.isAdminActive(mComponentName)) {
@@ -58,11 +60,26 @@ public class MainActivity extends AppCompatActivity {
             intent.putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION, "To run the block");
             startActivityForResult(intent, ADMIN_INTENT);
         }
+        Log.i(TAG, "On create finished");
+    }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.i(TAG, "On start");
+    }
+
+    @Override
+    protected void onResume() {
+        Log.i(TAG, "On resume");
+        super.onResume();
+        possibleQuestions.Init(this);
         wasSuccessful = false;
-        possibleQuestions.Execute(this, new PossibleAnswers() {
+        Random r = new Random();
+        possibleQuestions.Execute(this, r.nextInt(1<<10), new PossibleAnswers() {
             @Override
             public void Correct() {
+                Log.i(TAG, "Correct");
                 wasSuccessful = true;
                 ToneGenerator toneG = new ToneGenerator(AudioManager.STREAM_ALARM, 100);
                 toneG.startTone(ToneGenerator.TONE_CDMA_LOW_L, 60);

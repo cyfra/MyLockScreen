@@ -4,5 +4,6 @@ import android.support.v7.app.AppCompatActivity;
 
 interface PossibleQuestions {
     void Init(AppCompatActivity activity);
-    void Execute(AppCompatActivity activity, final PossibleAnswers answers);
+    // randomNumber: between 0 and 1<<10
+    void Execute(AppCompatActivity activity, int randomNumber, final PossibleAnswers answers);
 }

@@ -34,6 +34,7 @@
         android:id="@+id/imageName"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
+        android:inputType="textNoSuggestions"
         android:text="" />
 </RelativeLayout>
 </android.support.design.widget.CoordinatorLayout>

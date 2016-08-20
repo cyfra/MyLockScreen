@@ -3,12 +3,13 @@ package com.example.michalski.mylockscreen;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.widget.EditText;
 import android.widget.ImageView;
 
-import java.util.Random;
-
 public class TypeText implements PossibleQuestions {
+    private final static String TAG = "TypeText";
+
     Pictures pictures;
     @Override
     public void Init(AppCompatActivity activity) {
@@ -17,11 +18,11 @@ public class TypeText implements PossibleQuestions {
     }
 
     @Override
-    public void Execute(AppCompatActivity activity, final PossibleAnswers answers) {
-        Random r = new Random();
-        final String selected_key = pictures.pictures_keys.get(r.nextInt(pictures.pictures_keys.size()));
+    public void Execute(AppCompatActivity activity, int randomNumber, final PossibleAnswers answers) {
+        final String selected_key = pictures.pictures_keys.get(randomNumber % pictures.pictures_keys.size());
         ImageView view = (ImageView)activity.findViewById(R.id.imageView);
         view.setImageResource(pictures.pictures.get(selected_key));
+        Log.i(TAG, "Starting execute");
 
         final EditText resultText = (EditText)activity.findViewById(R.id.imageName);
         resultText.addTextChangedListener(new TextWatcher() {
@@ -42,7 +43,5 @@ public class TypeText implements PossibleQuestions {
                 }
             }
         });
-
-        answers.Correct();
     }
 }
