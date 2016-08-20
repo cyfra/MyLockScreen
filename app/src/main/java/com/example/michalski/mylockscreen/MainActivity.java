@@ -31,73 +31,6 @@ import org.w3c.dom.Text;
 import java.util.Random;
 
 
-interface PossibleAnswers {
-    public void Correct();
-    public void Incorrect();
-}
-
-interface PossibleQuestions {
-    public void Init(AppCompatActivity activity);
-
-    public void Execute(AppCompatActivity activity, final PossibleAnswers answers);
-}
-
-class SimpleAddOrDelete implements PossibleQuestions{
-    int first, second, result;
-    public enum MyOperation { ADD, SUBTRACT};
-    MyOperation operation;
-    public void Init(AppCompatActivity activity) {
-        activity.setContentView(R.layout.activity_main);
-        Random r = new Random();
-        first = r.nextInt(5) + 1;
-        String operationChar = null;
-        //if (r.nextInt(2) == 0) {
-            operation = MyOperation.ADD;
-            second = r.nextInt(5) + 1;
-            result = first + second;
-            operationChar = "+";
-        /*} else {
-            operation = MyOperation.SUBTRACT;
-            second = r.nextInt(first + 1);
-            result = first - second;
-            operationChar = "-";
-        }*/
-        ((TextView)activity.findViewById(R.id.firstPart)).setText(Integer.toString(first));
-        ((TextView)activity.findViewById(R.id.secondPart)).setText(Integer.toString(second));
-        ((TextView)activity.findViewById(R.id.operationPart)).setText(operationChar);
-    }
-
-    public void Execute(AppCompatActivity activity, final PossibleAnswers answers) {
-        final EditText resultText = (EditText)activity.findViewById(R.id.resultText);
-        assert resultText != null;
-        resultText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                int localresult = -1;
-                try {
-                    localresult = Integer.parseInt(s.toString());
-                } catch (java.lang.NumberFormatException e) {
-                    localresult = -1;
-                }
-
-                if (result == localresult) {
-                    answers.Correct();
-                } else {
-                    answers.Incorrect();
-                }
-            }
-        });
-    }
-}
-
 public class MainActivity extends AppCompatActivity {
 
     private ComponentName mComponentName;
@@ -111,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        possibleQuestions = new SimpleAddOrDelete();
+        possibleQuestions = /*new SimpleAddOrDelete()*/ new TypeText();
         possibleQuestions.Init(this);
 
         makeFullScreen();
