@@ -46,7 +46,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        possibleQuestions = /*new SimpleAddOrDelete()*/ new TypeText();
+        //possibleQuestions = new SimpleAddOrDelete();
+        possibleQuestions = new TypeText();
+        //possibleQuestions = new ReadingExercise();
         possibleQuestions.Init(this);
 
         makeFullScreen();
