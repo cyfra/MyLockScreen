@@ -38,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
     private ComponentName mComponentName;
     private static final int ADMIN_INTENT = 15;
     boolean wasSuccessful = false;
+    int attempts;
 
     PossibleQuestions possibleQuestions;
     DevicePolicyManager mDevicePolicyManager;
@@ -83,24 +84,36 @@ public class MainActivity extends AppCompatActivity {
             possibleQuestions = new TypeText();
         }
         possibleQuestions.Init(this);
+        AskQuestion(false);
+    }
+    protected void AskQuestion(boolean dueToErrors) {
+        if (dueToErrors) {
+            Toast.makeText(this, "Za duzo bledow.", Toast.LENGTH_LONG).show();
+        }
+        Random r = new Random();
         wasSuccessful = false;
-        possibleQuestions.Execute(this, r.nextInt(1<<10), new PossibleAnswers() {
+        attempts = 0;
+        possibleQuestions.Execute(this, r.nextInt(1 << 10), new PossibleAnswers() {
             @Override
             public void Correct() {
                 Log.i(TAG, "Correct");
-                wasSuccessful = true;
                 ToneGenerator toneG = new ToneGenerator(AudioManager.STREAM_ALARM, 100);
                 toneG.startTone(ToneGenerator.TONE_CDMA_LOW_L, 60);
                 toneG.startTone(ToneGenerator.TONE_CDMA_MED_L, 60);
                 toneG.startTone(ToneGenerator.TONE_CDMA_HIGH_L, 60);
-                moveTaskToBack(true);
+                if (attempts >= 3) {
+                    AskQuestion(true);
+                } else {
+                    wasSuccessful = true;
+                    moveTaskToBack(true);
+                }
             }
-
             @Override
             public void Incorrect() {
                 ToneGenerator toneG = new ToneGenerator(AudioManager.STREAM_ALARM, 100);
                 toneG.startTone(ToneGenerator.TONE_CDMA_ALERT_CALL_GUARD, 200);
                 wasSuccessful = false;
+                attempts += 1;
             }
         });
     }
