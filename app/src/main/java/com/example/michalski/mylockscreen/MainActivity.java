@@ -47,9 +47,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         //possibleQuestions = new SimpleAddOrDelete();
-        possibleQuestions = new TypeText();
+        //possibleQuestions = new TypeText();
         //possibleQuestions = new ReadingExercise();
-        possibleQuestions.Init(this);
+        //possibleQuestions.Init(this);
 
         makeFullScreen();
         startService(new Intent(this, LockScreenService.class));
@@ -75,9 +75,15 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         Log.i(TAG, "On resume");
         super.onResume();
+        Random r = new Random();
+        int screen = r.nextInt(2);
+        if (screen == 0) {
+            possibleQuestions = new SimpleAddOrDelete();
+        } else {
+            possibleQuestions = new TypeText();
+        }
         possibleQuestions.Init(this);
         wasSuccessful = false;
-        Random r = new Random();
         possibleQuestions.Execute(this, r.nextInt(1<<10), new PossibleAnswers() {
             @Override
             public void Correct() {
