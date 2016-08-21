@@ -35,6 +35,8 @@
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
         android:inputType="textNoSuggestions"
-        android:text="" />
+        android:textSize="70dp"
+        android:text=""
+        android:width="250dp" />
 </RelativeLayout>
 </android.support.design.widget.CoordinatorLayout>
